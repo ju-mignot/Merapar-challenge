@@ -12,7 +12,7 @@ terraform {
   }
 }
 
-# Variable to define which AWS region resources will be deployed to.
+# Variable to define which AWS region resources will be deployed to. Set by default to 'us-east-1'.
 variable "region" {
   description = "AWS region"
   type        = string
@@ -25,7 +25,7 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-# A single shared value that all users see. Update this SSM parameter to change the string without redeploys.
+# Create a parameter named "merapar_challenge-dynamic_string" in AWS Systems Manager (SSM) with the default value "dynamic string".
 resource "aws_ssm_parameter" "mc_dynamic_string" {
   name  = "merapar_challenge-dynamic_string"
   type  = "String"
@@ -110,7 +110,7 @@ resource "aws_apigatewayv2_integration" "mc_lambda" {
   integration_method     = "POST"
 }
 
-# Map client request (GET /) to the Lambda integration previousy created.
+# Map the method GET / to the Lambda integration previousy created.
 resource "aws_apigatewayv2_route" "mc_api_route" {
   api_id    = aws_apigatewayv2_api.mc_http_api_gw.id
   route_key = "GET /"
