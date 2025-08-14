@@ -25,13 +25,6 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-# Create a parameter named "merapar_challenge-dynamic_string" in AWS Systems Manager (SSM) with the default value "dynamic string".
-resource "aws_ssm_parameter" "mc_dynamic_string" {
-  name  = "merapar_challenge-dynamic_string"
-  type  = "String"
-  value = "dynamic string"
-}
-
 
 # Create an IAM role that only a Lambda function can assume.
 resource "aws_iam_role" "mc_lambda_role" {
@@ -76,6 +69,14 @@ resource "aws_iam_role_policy_attachment" "attach_custompolicy_ssm_read" {
   role       = aws_iam_role.mc_lambda_role.name
   policy_arn = aws_iam_policy.mc_custompolicy_ssm_read.arn
 }
+
+# Create a parameter named "merapar_challenge-dynamic_string" in AWS Systems Manager (SSM) with the default value "dynamic string".
+resource "aws_ssm_parameter" "mc_dynamic_string" {
+  name  = "merapar_challenge-dynamic_string"
+  type  = "String"
+  value = "dynamic string"
+}
+
 
 # Pack up Python code of the Lambda function into a .zip file using Archive provider
 data "archive_file" "lambda_zip" {
