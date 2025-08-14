@@ -79,7 +79,7 @@ resource "aws_ssm_parameter" "mc_dynamic_string" {
 
 
 # Pack up Python code of the Lambda function into a .zip file using Archive provider
-data "archive_file" "lambda_zip" {
+data "archive_file" "mc_lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/../lambda"
   output_path = "${path.module}/../lambda/function.zip"
@@ -90,8 +90,8 @@ resource "aws_lambda_function" "mc_lambda_function" {
   role             = aws_iam_role.mc_lambda_role.arn
   handler          = "merapar_challenge.handler"
   runtime          = "python3.12"
-  filename         = data.archive_file.lambda_zip.output_path
-  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  filename         = data.archive_file.mc_lambda_zip.output_path
+  source_code_hash = data.archive_file.mc_lambda_zip.output_base64sha256
   timeout          = 10
   memory_size      = 128
 }
